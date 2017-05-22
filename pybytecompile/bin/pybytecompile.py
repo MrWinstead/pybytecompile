@@ -3,17 +3,29 @@
 import logging
 
 from argparse import ArgumentParser
+from compileall import compile_dir
 from enum import Enum
-from sys import argv
+from os import path
+from sys import argv, exit
+
+from pybytecompile.optimization_levels import OptimizationLevel
+
+class ExitValues(Enum):
+    """Application exit values
+    """
+    SUCCESS = 0
 
 
 class ArgumentName(Enum):
     """Container for all CLI argument names
     """
     verbose = "verbose"
+    directory = "directory"
 
 _PROGRAM_ARGUMENTS = (
-    (("-v", ArgumentName.verbose.value), {"action": "count"},),
+    (("-v", ArgumentName.verbose.value), {"action": "count", "default": 0,
+                                          "required": False},),
+    (("-d", ArgumentName.directory.value), {"required": True},),
 )
 
 
@@ -33,9 +45,23 @@ def main(raw_args: list) -> int:
     :param raw_args: 
     :return: 
     """
+    return_value = ExitValues.SUCCESS
     parser = get_argumentparser()
-    args = parser.parse_args(raw_args)
+    args = vars(parser.parse_args(raw_args))
     logging.debug("running with arguments %s", args)
 
+    full_path = path.abspath(args[ArgumentName.directory.name])
+
+    logging.info("compiling directory '%s'", full_path)
+    compile_dir(
+        full_path,
+        optimize=OptimizationLevel.FULL.value,
+        force=True,
+        ddir=".",
+        legacy=True
+    )
+
+    return return_value.value
+
 if __name__ == "__main__":
-    main(argv[1:])
+    exit(main(argv[1:]))
