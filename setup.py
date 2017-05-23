@@ -5,5 +5,6 @@ from distutils.core import setup
 setup(
     name="pybytecompile",
     version="1.0.0",
-    packages=["pybytecompile"]
+    packages=["pybytecompile"],
+    scripts=["pybytecompile/bin/pybytecompile.py"]
 )
