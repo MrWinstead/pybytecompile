@@ -27,7 +27,7 @@ class ArgumentName(Enum):
 _PROGRAM_ARGUMENTS = (
     (("-v", ArgumentName.verbose.value), {"action": "count", "default": 0,
                                           "required": False},),
-    (("-d", ArgumentName.directory.value), {"required": True},),
+    ((ArgumentName.directory.value,), {"required": True},),
 )
 
 
@@ -52,8 +52,7 @@ def do_compile_directory(dirname: str) -> None:
                     str(file),
                     optimize=OptimizationLevel.FULL.value,
                     force=True,
-                    ddir=".",
-                    legacy=True
+                    ddir="."
                 )
 
 

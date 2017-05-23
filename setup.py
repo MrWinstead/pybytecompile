@@ -6,5 +6,5 @@ setup(
     name="pybytecompile",
     version="1.0.0",
     packages=["pybytecompile"],
-    scripts=["pybytecompile/bin/pybytecompile.py"]
+    scripts=["bin/pybytecompiler.py"]
 )
